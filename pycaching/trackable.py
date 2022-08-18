@@ -225,7 +225,7 @@ class Trackable(object):
         tbImage = root.find(id="ctl00_ContentBody_BugDetails_BugImage")
         if tbImage is None:
             self.image = None
-        else
+        else:
             self.image = tbImage.get("src")
 
         # another Groundspeak trick... inconsistent relative / absolute URL on one page
