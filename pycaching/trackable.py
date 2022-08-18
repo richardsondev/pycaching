@@ -11,7 +11,7 @@ class Trackable(object):
     """Represents a trackable with its properties."""
 
     def __init__(
-        self, geocaching, tid, *, name=None, location=None, owner=None, type=None, description=None, goal=None, url=None, image=None, icon=None
+        self, geocaching, tid, *, name=None, location=None, owner=None, type=None, description=None, goal=None, url=None, image=None, icon=None, releasedate=None
     ):
         self.geocaching = geocaching
         if tid is not None:
@@ -34,6 +34,8 @@ class Trackable(object):
             self.image = image
         if icon is not None:
             self.icon = icon
+        if releasedate is not None:
+            self.releasedate = releasedate
         self._log_page_url = None
         self._kml_url = None
 
@@ -125,6 +127,19 @@ class Trackable(object):
     @icon.setter
     def icon(self, icon):
         self._icon = icon
+        
+    @property
+    @lazy_loaded
+    def releasedate(self):
+        """The trackable's release date.
+
+        :type: :class:`str`
+        """
+        return self._releasedate
+
+    @releasedate.setter
+    def releasedate(self, releasedate):
+        self._releasedate = releasedate
 
     @property
     @lazy_loaded
@@ -221,6 +236,7 @@ class Trackable(object):
         self.owner = root.find(id="ctl00_ContentBody_BugDetails_BugOwner").text
         self.goal = root.find(id="TrackableGoal").text
         self.description = root.find(id="TrackableDetails").text
+        self.releasedate = root.find(id="ctl00_ContentBody_BugDetails_BugReleaseDate").text
         self._kml_url = root.find(id="ctl00_ContentBody_lnkGoogleKML").get("href")
         tbImage = root.find(id="ctl00_ContentBody_BugDetails_BugImage")
         if tbImage is None:
