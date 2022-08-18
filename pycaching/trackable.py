@@ -126,7 +126,7 @@ class Trackable(object):
         """
         return self._icon
 
-    @image.setter
+    @icon.setter
     def image(self, icon):
         self._icon = icon
 
