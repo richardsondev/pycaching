@@ -69,10 +69,6 @@ class Trackable(object):
 
     @geocaching.setter
     def geocaching(self, geocaching):
-        if not hasattr(geocaching, "_request"):
-            raise errors.ValueError(
-                "Passed object (type: '{}') doesn't contain '_request' method.".format(_type(geocaching))
-            )
         self._geocaching = geocaching
 
     @property
