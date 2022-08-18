@@ -222,7 +222,11 @@ class Trackable(object):
         self.goal = root.find(id="TrackableGoal").text
         self.description = root.find(id="TrackableDetails").text
         self._kml_url = root.find(id="ctl00_ContentBody_lnkGoogleKML").get("href")
-        self.image = root.find(id="ctl00_ContentBody_BugDetails_BugImage").get("src")
+        tbImage = root.find(id="ctl00_ContentBody_BugDetails_BugImage")
+        if tbImage is None:
+            self.image = None
+        else
+            self.image = tbImage.get("src")
 
         # another Groundspeak trick... inconsistent relative / absolute URL on one page
         self._log_page_url = "/track/" + root.find(id="ctl00_ContentBody_LogLink")["href"]
