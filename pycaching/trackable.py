@@ -11,7 +11,7 @@ class Trackable(object):
     """Represents a trackable with its properties."""
 
     def __init__(
-        self, geocaching, tid, *, name=None, location=None, owner=None, type=None, description=None, goal=None, url=None
+        self, geocaching, tid, *, name=None, location=None, owner=None, type=None, description=None, goal=None, url=None, image=None, icon=None
     ):
         self.geocaching = geocaching
         if tid is not None:
@@ -30,6 +30,10 @@ class Trackable(object):
             self.type = type
         if url is not None:
             self.url = url
+        if image is not None:
+            self.image = image
+        if icon is not None:
+            self.icon = icon
         self._log_page_url = None
         self._kml_url = None
 
@@ -99,6 +103,32 @@ class Trackable(object):
     @location.setter
     def location(self, location):
         self._location = location
+
+    @property
+    @lazy_loaded
+    def image(self):
+        """The trackable current image.
+
+        :type: :class:`str`
+        """
+        return self._image
+
+    @image.setter
+    def image(self, image):
+        self._image = image
+        
+    @property
+    @lazy_loaded
+    def icon(self):
+        """The trackable's type icon image.
+
+        :type: :class:`str`
+        """
+        return self._icon
+
+    @image.setter
+    def image(self, icon):
+        self._icon = icon
 
     @property
     @lazy_loaded
@@ -188,10 +218,12 @@ class Trackable(object):
         self.tid = root.find("span", "CoordInfoCode").text
         self.name = root.find(id="ctl00_ContentBody_lbHeading").text
         self.type = root.find(id="ctl00_ContentBody_BugTypeImage").get("alt")
+        self.icon = root.find(id="ctl00_ContentBody_BugTypeImage").get("src")
         self.owner = root.find(id="ctl00_ContentBody_BugDetails_BugOwner").text
         self.goal = root.find(id="TrackableGoal").text
         self.description = root.find(id="TrackableDetails").text
         self._kml_url = root.find(id="ctl00_ContentBody_lnkGoogleKML").get("href")
+        self.image = root.find(id="ctl00_ContentBody_BugDetails_BugImage").get("src")
 
         # another Groundspeak trick... inconsistent relative / absolute URL on one page
         self._log_page_url = "/track/" + root.find(id="ctl00_ContentBody_LogLink")["href"]
